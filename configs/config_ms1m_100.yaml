@@ -1,5 +1,5 @@
 # model params
-backbone_type: resnet_v2_m_50
+backbone_type: resnet_v2_m_101
 loss_type: arcface
 out_type: E
 

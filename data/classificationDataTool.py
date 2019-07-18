@@ -108,6 +108,7 @@ class ClassificationImageData:
         for i in imgidx:
             img_info = imgrec.read_idx(i)
             header, img = mx.recordio.unpack(img_info)
+            # print(header)
             l = int(header.label)
             labels.append(l)
             img = io.BytesIO(img)
@@ -134,6 +135,6 @@ class ClassificationImageData:
 
 
     def read_TFRecord(self, filenames):
-        dataset = tf.data.TFRecordDataset(filenames, buffer_size=256<<20)
-        return dataset.map(self.parse_function, num_parallel_calls=8)
+        dataset = tf.data.TFRecordDataset(filenames, buffer_size=256<<20).shuffle(1000)
+        return dataset.map(self.parse_function, num_parallel_calls=16)
 

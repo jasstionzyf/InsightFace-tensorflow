@@ -103,6 +103,8 @@ if __name__ == '__main__':
             saver = tf.train.Saver()
             saver.restore(sess, args.model_path)
             print('done!')
+            tensorNames = [tensor.name for tensor in sess.graph.as_graph_def().node]
+            print(tensorNames)
 
             batch_size = config['batch_size']
             # batch_size = 32
@@ -114,10 +116,15 @@ if __name__ == '__main__':
                 val_data[os.path.basename(args.val_data)] = args.val_data
             for k, v in val_data.items():
                 imgs, imgs_f, issame = load_bin(v, config['image_size'])
+                print(imgs[0])
                 print('forward running...')
                 embds_arr = run_embds(sess, imgs, batch_size, config['image_size'], args.train_mode, embds, images, train_phase_dropout, train_phase_bn)
+                print(embds_arr[0])
+
                 embds_f_arr = run_embds(sess, imgs_f, batch_size, config['image_size'], args.train_mode, embds, images, train_phase_dropout, train_phase_bn)
                 embds_arr = embds_arr/np.linalg.norm(embds_arr, axis=1, keepdims=True)+embds_f_arr/np.linalg.norm(embds_f_arr, axis=1, keepdims=True)
+
+                print(embds_arr[0::2][0])
                 print('done!')
                 tpr, fpr, acc_mean, acc_std, tar, tar_std, far = evaluate(embds_arr, issame, far_target=args.target_far, distance_metric=0)
                 print('eval on %s: acc--%1.5f+-%1.5f, tar--%1.5f+-%1.5f@far=%1.5f' % (k, acc_mean, acc_std, tar, tar_std, far))

@@ -5,8 +5,8 @@ from scipy import misc
 
 import numpy as np
 
-read_dir = r'F:\FaceDataset\faces_webface_112x112'
-save_dir = r'F:\FaceDataset\faces_webface_112x112\img_sample'
+read_dir = '/Volumes/v2/mlib_data/models/arcefaces/faces_emore/'
+save_dir = '/data/tmp/MS1M-ArcFace/'
 
 if not os.path.exists(save_dir):
     os.makedirs(save_dir)
@@ -25,6 +25,10 @@ for i in imgidx:
     l = int(header.label)
     img = io.BytesIO(img)
     img = misc.imread(img)
+    img=img.astype(np.uint8)
+    str=img.tostring()
+    img=np.fromstring(img, np.uint8).reshape(img.shape)
+    print(img)
     print('============================================')
     print(img.dtype)
     print(np.max(img))
